@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGAI - Gestão Ambiental Inteligente</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f7f4;
+    color: #183027;
+}
+
+main {
+    max-width: 1000px;
+    margin: auto;
+    padding: 24px;
+}
+
+.head {
+    background: #0b4b36;
+    color: white;
+    padding: 24px;
+    border-radius: 16px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.card, .panel {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 3px 12px #0001;
+}
+
+.v {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+.ok {
+    color: #16833b;
+    font-weight: bold;
+}
+
+.warn {
+    color: #a66b00;
+    font-weight: bold;
+}
+
+.bad {
+    color: #b51e1e;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 5px 0 12px;
+    border: 1px solid #ccd8d1;
+    border-radius: 8px;
+}
+
+button {
+    background: #0b4b36;
+    color: white;
+    border: 0;
+    border-radius: 9px;
+    padding: 11px 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<div class="head">
+    <h1>🌿 SGAI — Gestão Ambiental Inteligente</h1>
+    <div>Dashboard ambiental — MVP</div>
+</div>
+
+<div id="cards" class="grid"></div>
+
+<div class="panel" style="margin-top:18px">
+
+<h2>📊 Dados e Indicadores</h2>
+
+<label>Energia (kWh)</label>
+<input id="energia" type="number" value="370">
+
+<label>Água (Litros)</label>
+<input id="agua" type="number" value="2800">
+
+<label>Resíduos (kg)</label>
+<input id="residuos" type="number" value="70">
+
+<br>
+
+<button onclick="atualizar()">
+    Atualizar Dashboard
+</button>
+
+</div>
+
+<div id="alertas" class="panel" style="margin-top:18px"></div>
+
+</main>
+
+<script>
+
+const metas = {
+    Energia: 400,
+    Água: 3000,
+    Resíduos: 75
+};
+
+function atualizar() {
+
+    const dados = [
+        {
+            icone: "⚡",
+            nome: "Energia",
+            valor: Number(document.getElementById("energia").value),
+            unidade: "kWh"
+        },
+
+        {
+            icone: "💧",
+            nome: "Água",
+            valor: Number(document.getElementById("agua").value),
+            unidade: "L"
+        },
+
+        {
+            icone: "♻️",
+            nome: "Resíduos",
+            valor: Number(document.getElementById("residuos").value),
+            unidade: "kg"
+        }
+    ];
+
+    const cards = document.getElementById("cards");
+
+    cards.innerHTML = dados.map(item => {
+
+        let classe;
+        let mensagem;
+
+        if (item.valor > metas[item.nome]) {
+            classe = "bad";
+            mensagem = "🔴 Acima da meta";
+        }
+        else if (item.valor >= metas[item.nome] * 0.9) {
+            classe = "warn";
+            mensagem = "🟡 Atenção";
+        }
+        else {
+            classe = "ok";
+            mensagem = "🟢 Dentro da meta";
+        }
+
+        return `
+            <div class="card">
+
+                <b>${item.icone} ${item.nome}</b>
+
+                <div class="v">
+                    ${item.valor.toLocaleString("pt-BR")}
+                    ${item.unidade}
+                </div>
+
+                <span class="${classe}">
+                    ${mensagem}
+                </span>
+
+                <p>
+                    Meta:
+                    ${metas[item.nome].toLocaleString("pt-BR")}
+                    ${item.unidade}
+                </p>
+
+            </div>
+        `;
+
+    }).join("");
+
+    const acima = dados.filter(
+        item => item.valor > metas[item.nome]
+    );
+
+    const alertas = document.getElementById("alertas");
+
+    if (acima.length > 0) {
+
+        alertas.innerHTML = acima.map(item => `
+
+            <div>
+
+                <b class="bad">
+                    🔴 ALERTA: ${item.nome}
+                </b>
+
+                <p>
+                    O consumo chegou a
+                    <strong>
+                        ${item.valor.toLocaleString("pt-BR")}
+                        ${item.unidade}
+                    </strong>
+                    e ultrapassou a meta de
+                    <strong>
+                        ${metas[item.nome].toLocaleString("pt-BR")}
+                        ${item.unidade}
+                    </strong>.
+                </p>
+
+            </div>
+
+        `).join("");
+
+    } else {
+
+        alertas.innerHTML = `
+
+            <b class="ok">
+                🟢 Tudo certo!
+            </b>
+
+            <p>
+                Nenhum indicador ultrapassou a meta.
+            </p>
+
+        `;
+    }
+}
+
+atualizar();
+
+</script>
+
+</body>
+  </html>
