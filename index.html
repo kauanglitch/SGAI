@@ -1,253 +1,1289 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SGAI - Gestão Ambiental Inteligente</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SGAI — Gestão Ambiental Inteligente</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f3f7f4;
-    color: #183027;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font:15px Arial,sans-serif;
+  background:#eef4f0;
+  color:#183027
 }
 
-main {
-    max-width: 1000px;
-    margin: auto;
-    padding: 24px;
+.app{
+  display:flex;
+  min-height:100vh
 }
 
-.head {
-    background: #0b4b36;
-    color: white;
-    padding: 24px;
-    border-radius: 16px;
+.side{
+  width:235px;
+  background:#083f2d;
+  color:#fff;
+  padding:22px 14px;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 14px;
-    margin-top: 18px;
+.brand{
+  font-size:21px;
+  font-weight:bold;
+  margin:0 8px 24px
 }
 
-.card, .panel {
-    background: white;
-    border-radius: 14px;
-    padding: 18px;
-    box-shadow: 0 3px 12px #0001;
+.brand small{
+  display:block;
+  font-size:12px;
+  font-weight:normal;
+  opacity:.75;
+  margin-top:5px
 }
 
-.v {
-    font-size: 28px;
-    font-weight: bold;
-    margin: 8px 0;
+.nav{
+  display:block;
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#dcebe4;
+  text-align:left;
+  padding:12px 14px;
+  border-radius:10px;
+  margin:5px 0;
+  font-weight:bold;
+  cursor:pointer
 }
 
-.ok {
-    color: #16833b;
-    font-weight: bold;
+.nav:hover,
+.nav.active{
+  background:#176247;
+  color:#fff
 }
 
-.warn {
-    color: #a66b00;
-    font-weight: bold;
+.content{
+  margin-left:235px;
+  width:calc(100% - 235px);
+  padding:26px;
+  max-width:1400px
 }
 
-.bad {
-    color: #b51e1e;
-    font-weight: bold;
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
+  margin-bottom:20px
 }
 
-input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    margin: 5px 0 12px;
-    border: 1px solid #ccd8d1;
-    border-radius: 8px;
+.top h1{
+  margin:0;
+  color:#123c2d
 }
 
-button {
-    background: #0b4b36;
-    color: white;
-    border: 0;
-    border-radius: 9px;
-    padding: 11px 16px;
-    font-weight: bold;
-    cursor: pointer;
+.sub{
+  color:#65756e;
+  margin-top:5px
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px
+}
+
+.card,
+.panel{
+  background:#fff;
+  border-radius:15px;
+  padding:19px;
+  box-shadow:0 4px 16px #173c2a12
+}
+
+.card{
+  border-left:5px solid #1b8157
+}
+
+.card.warn{
+  border-left-color:#d39b25
+}
+
+.card.bad{
+  border-left-color:#d63c3c
+}
+
+.label{
+  font-weight:bold;
+  color:#51635b
+}
+
+.v{
+  font-size:29px;
+  font-weight:bold;
+  margin:10px 0 6px
+}
+
+.meta{
+  font-size:12px;
+  color:#75847e
+}
+
+.ok{
+  color:#16833b
+}
+
+.warntext{
+  color:#a66b00
+}
+
+.badtext{
+  color:#b51e1e
+}
+
+.section{
+  display:none
+}
+
+.section.show{
+  display:block
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:16px;
+  margin-top:16px
+}
+
+.chart{
+  height:245px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-around;
+  gap:20px;
+  padding:20px 15px 8px;
+  border-bottom:1px solid #dbe5df
+}
+
+.barwrap{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:center;
+  flex:1
+}
+
+.bar{
+  width:min(75px,70%);
+  min-height:8px;
+  border-radius:9px 9px 0 0;
+  background:#27865d
+}
+
+.bar.water{
+  background:#3d8fba
+}
+
+.bar.waste{
+  background:#8b6b39
+}
+
+.barvalue{
+  font-weight:bold;
+  margin-bottom:6px
+}
+
+.barlabel{
+  margin-top:8px;
+  font-weight:bold;
+  color:#52645c
+}
+
+.alert{
+  padding:13px 15px;
+  border-radius:10px;
+  margin:10px 0
+}
+
+.alert.bad{
+  background:#ffe5e5;
+  color:#8f1717
+}
+
+.alert.warn{
+  background:#fff2d5;
+  color:#805600
+}
+
+.alert.ok{
+  background:#e2f5e9;
+  color:#176b37
+}
+
+.recommend{
+  padding:10px 0;
+  border-bottom:1px solid #edf1ef
+}
+
+.recommend:last-child{
+  border:0
+}
+
+.formgrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px
+}
+
+.field label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:6px
+}
+
+.field input{
+  width:100%;
+  padding:11px;
+  border:1px solid #cbd8d1;
+  border-radius:9px;
+  font-size:16px
+}
+
+.btn{
+  background:#0b4b36;
+  color:white;
+  border:0;
+  border-radius:9px;
+  padding:11px 17px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:14px
+}
+
+.btn:hover{
+  background:#176247
+}
+
+.table{
+  width:100%;
+  border-collapse:collapse
+}
+
+.table th,
+.table td{
+  text-align:left;
+  padding:12px;
+  border-bottom:1px solid #e5ece8
+}
+
+.pill{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:99px;
+  font-size:12px;
+  font-weight:bold
+}
+
+.pill.ok{
+  background:#e1f3e8
+}
+
+.pill.warn{
+  background:#fff0cc
+}
+
+.pill.bad{
+  background:#ffe0e0
+}
+
+.manage{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px
+}
+
+.item{
+  border:1px solid #dce6e1;
+  border-radius:12px;
+  padding:14px;
+  margin:9px 0;
+  background:#fbfdfc
+}
+
+.itemhead{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center
+}
+
+.mini{
+  padding:7px 10px;
+  border:0;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer
+}
+
+.mini.edit{
+  background:#e6f1eb;
+  color:#0b4b36
+}
+
+.mini.del{
+  background:#ffe4e4;
+  color:#a11d1d
+}
+
+@media(max-width:800px){
+  .manage{
+    grid-template-columns:1fr
+  }
+
+  .side{
+    width:100%;
+    height:auto;
+    bottom:auto;
+    position:relative;
+    padding:14px
+  }
+
+  .app{
+    display:block
+  }
+
+  .content{
+    margin:0;
+    width:100%;
+    padding:18px
+  }
+
+  .nav{
+    display:inline-block;
+    width:auto;
+    margin:3px 1px;
+    padding:9px
+  }
+
+  .grid,
+  .formgrid{
+    grid-template-columns:1fr
+  }
+
+  .row{
+    grid-template-columns:1fr
+  }
+
+  .top{
+    display:block
+  }
+
+  .top button{
+    margin-top:10px
+  }
+
+  .brand{
+    margin-bottom:10px
+  }
 }
 </style>
 </head>
-
 <body>
 
-<main>
+<div class="app">
 
-<div class="head">
-    <h1>🌿 SGAI — Gestão Ambiental Inteligente</h1>
-    <div>Dashboard ambiental — MVP</div>
-</div>
+<aside class="side">
 
-<div id="cards" class="grid"></div>
+  <div class="brand">
+    🌿 SGAI
+    <small>Gestão Ambiental Inteligente</small>
+  </div>
 
-<div class="panel" style="margin-top:18px">
+  <button class="nav active" onclick="showTab('overview',this)">
+    ⌂ Visão Geral
+  </button>
 
-<h2>📊 Dados e Indicadores</h2>
+  <button class="nav" onclick="showTab('energia',this)">
+    ⚡ Energia
+  </button>
 
-<label>Energia (kWh)</label>
-<input id="energia" type="number" value="370">
+  <button class="nav" onclick="showTab('agua',this)">
+    💧 Água
+  </button>
 
-<label>Água (Litros)</label>
-<input id="agua" type="number" value="2800">
+  <button class="nav" onclick="showTab('residuos',this)">
+    ♻️ Resíduos
+  </button>
 
-<label>Resíduos (kg)</label>
-<input id="residuos" type="number" value="70">
+  <button class="nav" onclick="showTab('relatorios',this)">
+    📊 Relatórios
+  </button>
 
-<br>
+  <button class="nav" onclick="showTab('dados',this)">
+    ✏️ Dados e Indicadores
+  </button>
 
-<button onclick="atualizar()">
-    Atualizar Dashboard
-</button>
+  <button class="nav" onclick="showTab('categorias',this)">
+    ⚙️ Gerenciar Categorias
+  </button>
 
-</div>
+</aside>
 
-<div id="alertas" class="panel" style="margin-top:18px"></div>
+<main class="content">
+
+  <div class="top">
+
+    <div>
+      <h1>Dashboard Ambiental</h1>
+
+      <div class="sub">
+        Monitoramento dos principais indicadores da empresa
+      </div>
+    </div>
+
+    <button class="btn" onclick="go()">
+      ↻ Atualizar dados
+    </button>
+
+  </div>
+
+
+  <!-- VISÃO GERAL -->
+
+  <section id="overview" class="section show">
+
+    <div id="cards" class="grid"></div>
+
+    <div class="row">
+
+      <div class="panel">
+
+        <h2>📈 Evolução dos Indicadores</h2>
+
+        <div id="chart" class="chart"></div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <h2>🚨 Alertas</h2>
+
+        <div id="alerts"></div>
+
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div class="panel">
+
+        <h2>💡 Recomendações</h2>
+
+        <div class="recommend">
+          ⚡ Avaliar equipamentos de maior consumo de energia.
+        </div>
+
+        <div class="recommend">
+          💧 Verificar vazamentos e desperdícios de água.
+        </div>
+
+        <div class="recommend">
+          ♻️ Acompanhar a separação e destinação dos resíduos.
+        </div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <h2>📌 Status</h2>
+
+        <p>
+          🟢 Sistema ativo e monitorando os indicadores.
+        </p>
+
+        <p>
+          Última atualização:
+          <span id="hora">--:--</span>
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ENERGIA -->
+
+  <section id="energia" class="section">
+
+    <div class="panel">
+
+      <h2>⚡ Energia</h2>
+
+      <p>
+        Consumo atual e limite definido para o período.
+      </p>
+
+      <div id="energiaBox"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ÁGUA -->
+
+  <section id="agua" class="section">
+
+    <div class="panel">
+
+      <h2>💧 Água</h2>
+
+      <p>
+        Consumo atual e limite definido para o período.
+      </p>
+
+      <div id="aguaBox"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- RESÍDUOS -->
+
+  <section id="residuos" class="section">
+
+    <div class="panel">
+
+      <h2>♻️ Resíduos</h2>
+
+      <p>
+        Geração atual e limite definido para o período.
+      </p>
+
+      <div id="residuosBox"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- RELATÓRIOS -->
+
+  <section id="relatorios" class="section">
+
+    <div class="panel">
+
+      <h2>📊 Relatórios</h2>
+
+      <table class="table">
+
+        <thead>
+
+          <tr>
+            <th>Indicador</th>
+            <th>Atual</th>
+            <th>Meta</th>
+            <th>Status</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="reportTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+  <!-- DADOS E INDICADORES -->
+
+  <section id="dados" class="section">
+
+    <div class="panel">
+
+      <h2>✏️ Dados e Indicadores</h2>
+
+      <p>
+        Altere os valores de cada indicador.
+        Os dados ficam salvos neste navegador.
+      </p>
+
+      <div id="dataFields" class="formgrid"></div>
+
+      <button class="btn" onclick="saveValues()">
+        💾 Salvar valores
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- GERENCIAR CATEGORIAS -->
+
+  <section id="categorias" class="section">
+
+    <div class="panel">
+
+      <h2>⚙️ Gerenciar Categorias</h2>
+
+      <p>
+        Adicione novos indicadores ou edite os existentes.
+        Defina nome, unidade, valor atual, meta e ícone.
+      </p>
+
+      <div class="manage">
+
+        <div>
+
+          <h3>➕ Adicionar indicador</h3>
+
+          <div class="field">
+
+            <label>Nome</label>
+
+            <input
+              id="newName"
+              placeholder="Ex.: Emissões de CO₂"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>Unidade</label>
+
+            <input
+              id="newUnit"
+              placeholder="Ex.: kg"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>Valor atual</label>
+
+            <input
+              id="newValue"
+              type="number"
+              value="0"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>Meta</label>
+
+            <input
+              id="newMeta"
+              type="number"
+              value="100"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>Ícone</label>
+
+            <input
+              id="newIcon"
+              value="🌱"
+              maxlength="4"
+            >
+
+          </div>
+
+
+          <button
+            class="btn"
+            onclick="addCategory()"
+          >
+            ➕ Adicionar categoria
+          </button>
+
+        </div>
+
+
+        <div>
+
+          <h3>✏️ Categorias existentes</h3>
+
+          <div id="categoryList"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
 
 </main>
 
+    </div>
 <script>
+var base = [
+  {name:'Energia',unit:'kWh',value:370,meta:400,icon:'⚡'},
+  {name:'Água',unit:'L',value:2800,meta:3000,icon:'💧'},
+  {name:'Resíduos',unit:'kg',value:70,meta:75,icon:'♻️'}
+];
 
-const metas = {
-    Energia: 400,
-    Água: 3000,
-    Resíduos: 75
-};
+var saved = localStorage.getItem('sgaiCategorias');
+var cats = saved ? JSON.parse(saved) : base;
 
-function atualizar() {
-
-    const dados = [
-        {
-            icone: "⚡",
-            nome: "Energia",
-            valor: Number(document.getElementById("energia").value),
-            unidade: "kWh"
-        },
-
-        {
-            icone: "💧",
-            nome: "Água",
-            valor: Number(document.getElementById("agua").value),
-            unidade: "L"
-        },
-
-        {
-            icone: "♻️",
-            nome: "Resíduos",
-            valor: Number(document.getElementById("residuos").value),
-            unidade: "kg"
-        }
-    ];
-
-    const cards = document.getElementById("cards");
-
-    cards.innerHTML = dados.map(item => {
-
-        let classe;
-        let mensagem;
-
-        if (item.valor > metas[item.nome]) {
-            classe = "bad";
-            mensagem = "🔴 Acima da meta";
-        }
-        else if (item.valor >= metas[item.nome] * 0.9) {
-            classe = "warn";
-            mensagem = "🟡 Atenção";
-        }
-        else {
-            classe = "ok";
-            mensagem = "🟢 Dentro da meta";
-        }
-
-        return `
-            <div class="card">
-
-                <b>${item.icone} ${item.nome}</b>
-
-                <div class="v">
-                    ${item.valor.toLocaleString("pt-BR")}
-                    ${item.unidade}
-                </div>
-
-                <span class="${classe}">
-                    ${mensagem}
-                </span>
-
-                <p>
-                    Meta:
-                    ${metas[item.nome].toLocaleString("pt-BR")}
-                    ${item.unidade}
-                </p>
-
-            </div>
-        `;
-
-    }).join("");
-
-    const acima = dados.filter(
-        item => item.valor > metas[item.nome]
-    );
-
-    const alertas = document.getElementById("alertas");
-
-    if (acima.length > 0) {
-
-        alertas.innerHTML = acima.map(item => `
-
-            <div>
-
-                <b class="bad">
-                    🔴 ALERTA: ${item.nome}
-                </b>
-
-                <p>
-                    O consumo chegou a
-                    <strong>
-                        ${item.valor.toLocaleString("pt-BR")}
-                        ${item.unidade}
-                    </strong>
-                    e ultrapassou a meta de
-                    <strong>
-                        ${metas[item.nome].toLocaleString("pt-BR")}
-                        ${item.unidade}
-                    </strong>.
-                </p>
-
-            </div>
-
-        `).join("");
-
-    } else {
-
-        alertas.innerHTML = `
-
-            <b class="ok">
-                🟢 Tudo certo!
-            </b>
-
-            <p>
-                Nenhum indicador ultrapassou a meta.
-            </p>
-
-        `;
-    }
+function persist(){
+  localStorage.setItem('sgaiCategorias',JSON.stringify(cats));
 }
 
-atualizar();
+function status(v,m){
+  return v>m ? 'bad' : v>=m*.9 ? 'warn' : 'ok';
+}
+
+function statusText(s){
+  return s==='bad'
+    ? '🔴 Acima da meta'
+    : s==='warn'
+    ? '🟡 Atenção'
+    : '🟢 Dentro da meta';
+}
+
+function go(){
+
+  var d=cats;
+
+  document.getElementById('cards').innerHTML=d.map(function(x){
+
+    var s=status(x.value,x.meta);
+
+    return `
+      <div class="card ${s}">
+        <div class="label">${x.icon} ${x.name}</div>
+
+        <div class="v">
+          ${Number(x.value).toLocaleString('pt-BR')} ${x.unit}
+        </div>
+
+        <div class="${s==='ok'?'ok':s==='warn'?'warntext':'badtext'}">
+          ${statusText(s)}
+        </div>
+
+        <div class="meta">
+          Meta: ${Number(x.meta).toLocaleString('pt-BR')} ${x.unit}
+        </div>
+      </div>
+    `;
+
+  }).join('');
+
+
+  var max=Math.max.apply(
+    null,
+    d.map(function(x){
+      return Number(x.meta)||1
+    })
+  );
+
+
+  document.getElementById('chart').innerHTML=d.map(function(x){
+
+    var h=Math.max(
+      8,
+      Math.round(Number(x.value)/max*175)
+    );
+
+    return `
+      <div class="barwrap">
+
+        <div class="barvalue">
+          ${Number(x.value).toLocaleString('pt-BR')}
+        </div>
+
+        <div
+          class="bar"
+          style="height:${h}px">
+        </div>
+
+        <div class="barlabel">
+          ${x.icon} ${x.name}
+        </div>
+
+      </div>
+    `;
+
+  }).join('');
+
+
+  var bad=d.filter(function(x){
+    return x.value>x.meta;
+  });
+
+  var near=d.filter(function(x){
+    return x.value>=x.meta*.9 && x.value<=x.meta;
+  });
+
+
+  if(bad.length){
+
+    document.getElementById('alerts').innerHTML=
+      bad.map(function(x){
+
+        return `
+          <div class="alert bad">
+
+            <b>🔴 ${x.name}</b>
+
+            <br>
+
+            ${Number(x.value).toLocaleString('pt-BR')}
+            ${x.unit}
+            acima da meta de
+            ${Number(x.meta).toLocaleString('pt-BR')}
+            ${x.unit}.
+
+          </div>
+        `;
+
+      }).join('');
+
+  }else if(near.length){
+
+    document.getElementById('alerts').innerHTML=
+      near.map(function(x){
+
+        return `
+          <div class="alert warn">
+
+            <b>🟡 ${x.name}</b>
+
+            <br>
+
+            Próximo do limite:
+            ${Number(x.value).toLocaleString('pt-BR')}
+            ${x.unit}
+            de
+            ${Number(x.meta).toLocaleString('pt-BR')}
+            ${x.unit}.
+
+          </div>
+        `;
+
+      }).join('');
+
+  }else{
+
+    document.getElementById('alerts').innerHTML=`
+
+      <div class="alert ok">
+
+        <b>🟢 Tudo certo!</b>
+
+        <br>
+
+        Nenhum indicador ultrapassou a meta.
+
+      </div>
+
+    `;
+
+  }
+
+
+  document.getElementById('reportTable').innerHTML=
+    d.map(function(x){
+
+      var s=status(x.value,x.meta);
+
+      return `
+        <tr>
+
+          <td>
+            ${x.icon} ${x.name}
+          </td>
+
+          <td>
+            ${Number(x.value).toLocaleString('pt-BR')}
+            ${x.unit}
+          </td>
+
+          <td>
+            ${Number(x.meta).toLocaleString('pt-BR')}
+            ${x.unit}
+          </td>
+
+          <td>
+            <span class="pill ${s}">
+              ${statusText(s)}
+            </span>
+          </td>
+
+        </tr>
+      `;
+
+    }).join('');
+
+
+  d.forEach(function(x){
+
+    var id=x.name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9]/g,'');
+
+    var el=document.getElementById(id+'Box');
+
+    if(el){
+      el.innerHTML=box(x);
+    }
+
+  });
+
+
+  document.getElementById('hora').textContent=
+    new Date().toLocaleTimeString(
+      'pt-BR',
+      {
+        hour:'2-digit',
+        minute:'2-digit'
+      }
+    );
+
+  renderDataFields();
+  renderCategories();
+}
+
+
+function box(x){
+
+  var s=status(x.value,x.meta);
+
+  return `
+
+    <div class="v">
+      ${Number(x.value).toLocaleString('pt-BR')}
+      ${x.unit}
+    </div>
+
+    <p class="${s==='ok'?'ok':s==='warn'?'warntext':'badtext'}">
+      ${statusText(s)}
+    </p>
+
+    <p>
+      Meta:
+      ${Number(x.meta).toLocaleString('pt-BR')}
+      ${x.unit}
+    </p>
+
+  `;
+}
+
+
+function renderDataFields(){
+
+  document.getElementById('dataFields').innerHTML=
+
+    cats.map(function(x,i){
+
+      return `
+
+        <div class="field">
+
+          <label>
+            ${x.icon}
+            ${x.name}
+            (${x.unit})
+          </label>
+
+          <input
+            type="number"
+            id="val${i}"
+            value="${x.value}"
+          >
+
+        </div>
+
+      `;
+
+    }).join('');
+}
+
+
+function saveValues(){
+
+  cats.forEach(function(x,i){
+
+    var el=document.getElementById('val'+i);
+
+    if(el){
+      x.value=Number(el.value)||0;
+    }
+
+  });
+
+  persist();
+  go();
+
+  alert('Valores salvos!');
+
+}
+
+
+function addCategory(){
+
+  var n=document.getElementById('newName').value.trim();
+
+  var u=document.getElementById('newUnit').value.trim();
+
+  if(!n || !u){
+
+    alert('Informe o nome e a unidade.');
+
+    return;
+
+  }
+
+
+  cats.push({
+
+    name:n,
+
+    unit:u,
+
+    value:
+      Number(
+        document.getElementById('newValue').value
+      )||0,
+
+    meta:
+      Number(
+        document.getElementById('newMeta').value
+      )||0,
+
+    icon:
+      document.getElementById('newIcon').value
+      ||'🌱'
+
+  });
+
+
+  persist();
+
+  go();
+
+  showTab(
+    'categorias',
+    document.querySelectorAll('.nav')[6]
+  );
+
+}
+
+
+function editCategory(i){
+
+  var x=cats[i];
+
+
+  var n=prompt(
+    'Nome da categoria:',
+    x.name
+  );
+
+  if(n===null)return;
+
+
+  var u=prompt(
+    'Unidade:',
+    x.unit
+  );
+
+  if(u===null)return;
+
+
+  var v=prompt(
+    'Valor atual:',
+    x.value
+  );
+
+  if(v===null)return;
+
+
+  var m=prompt(
+    'Meta:',
+    x.meta
+  );
+
+  if(m===null)return;
+
+
+  var ic=prompt(
+    'Ícone:',
+    x.icon
+  );
+
+  if(ic===null)return;
+
+
+  x.name=n.trim()||x.name;
+
+  x.unit=u.trim()||x.unit;
+
+  x.value=Number(v)||0;
+
+  x.meta=Number(m)||0;
+
+  x.icon=ic||x.icon;
+
+
+  persist();
+
+  go();
+
+}
+
+
+function deleteCategory(i){
+
+  if(cats.length===1){
+
+    alert(
+      'Mantenha pelo menos uma categoria.'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    confirm(
+      'Excluir '+cats[i].name+'?'
+    )
+  ){
+
+    cats.splice(i,1);
+
+    persist();
+
+    go();
+
+  }
+
+}
+
+
+function renderCategories(){
+
+  document.getElementById('categoryList').innerHTML=
+
+    cats.map(function(x,i){
+
+      return `
+
+        <div class="item">
+
+          <div class="itemhead">
+
+            <b>
+              ${x.icon} ${x.name}
+            </b>
+
+            <span>
+              ${x.value} ${x.unit}
+              /
+              meta ${x.meta}
+            </span>
+
+          </div>
+
+          <button
+            class="mini edit"
+            onclick="editCategory(${i})">
+            ✏️ Editar
+          </button>
+
+          <button
+            class="mini del"
+            onclick="deleteCategory(${i})">
+            🗑️ Excluir
+          </button>
+
+        </div>
+
+      `;
+
+    }).join('');
+
+}
+
+
+function showTab(id,el){
+
+  document
+    .querySelectorAll('.section')
+    .forEach(function(s){
+
+      s.classList.remove('show');
+
+    });
+
+
+  document
+    .getElementById(id)
+    .classList.add('show');
+
+
+  document
+    .querySelectorAll('.nav')
+    .forEach(function(n){
+
+      n.classList.remove('active');
+
+    });
+
+
+  if(el){
+    el.classList.add('active');
+  }
+
+
+  if(id==='dados'){
+    renderDataFields();
+  }
+
+
+  if(id==='categorias'){
+    renderCategories();
+  }
+
+}
+
+
+persist();
+
+go();
 
 </script>
 
 </body>
-  </html>
+</html>
